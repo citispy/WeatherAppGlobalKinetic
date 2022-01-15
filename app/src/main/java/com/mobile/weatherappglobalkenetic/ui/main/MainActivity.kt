@@ -1,7 +1,8 @@
-package com.mobile.weatherappglobalkenetic
+package com.mobile.weatherappglobalkenetic.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.mobile.weatherappglobalkenetic.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
