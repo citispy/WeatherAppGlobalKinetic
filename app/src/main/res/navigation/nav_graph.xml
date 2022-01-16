@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/weatherFragment">
+
+    <fragment
+        android:id="@+id/weatherFragment"
+        android:name="com.mobile.weatherappglobalkenetic.ui.weather.WeatherFragment">
+        <action
+            android:id="@+id/action_weatherFragment_to_placePickerFragment"
+            app:destination="@id/placePickerFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/weatherFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/placePickerFragment"
+        android:name="com.mobile.weatherappglobalkenetic.ui.placepicker.PlacePickerFragment"
+        android:label="Choose a city"
+        tools:layout="@layout/fragment_place_picker" />
+</navigation>
