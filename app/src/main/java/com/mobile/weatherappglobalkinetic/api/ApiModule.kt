@@ -1,6 +1,7 @@
 package com.mobile.weatherappglobalkinetic.api
 
 import android.content.Context
+import com.mobile.weatherappglobalkinetic.BuildConfig
 import com.mobile.weatherappglobalkinetic.ui.weather.current.CurrentWeatherRepository
 import com.mobile.weatherappglobalkinetic.ui.weather.current.WeatherRepository
 import com.mobile.weatherappglobalkinetic.ui.weather.current.WeatherRequestManager
@@ -18,7 +19,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-private const val API_KEY = "9fede514eb1ce0607ba260c1c96cf81d"
 private const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
 
 @Module
@@ -41,7 +41,7 @@ object ApiModule {
                 var request = chain.request()
                 val url = request.url
                     .newBuilder()
-                    .addQueryParameter("APPID", API_KEY).build()
+                    .addQueryParameter("APPID", BuildConfig.OPEN_WEATHER_API_KEY).build()
                 request = request.newBuilder().url(url).build()
                 chain.proceed(request)
             }.build()
