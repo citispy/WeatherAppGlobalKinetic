@@ -1,12 +1,17 @@
 package com.mobile.weatherappglobalkenetic.api
 
-import com.mobile.weatherappglobalkenetic.ui.weather.current.WeatherRequestManager
+import android.content.Context
+import com.mobile.weatherappglobalkenetic.WeatherApplication
 import com.mobile.weatherappglobalkenetic.ui.weather.current.CurrentWeatherRepository
-
 import com.mobile.weatherappglobalkenetic.ui.weather.current.WeatherRepository
+import com.mobile.weatherappglobalkenetic.ui.weather.current.WeatherRequestManager
+import com.mobile.weatherappglobalkenetic.ui.weather.forecast.ForecastRequestManager
+import com.mobile.weatherappglobalkenetic.ui.weather.repository.ForecastRepository
+import com.mobile.weatherappglobalkenetic.ui.weather.repository.ForecastWeatherRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -56,19 +61,21 @@ object ApiModule {
 
     @Singleton
     @Provides
-    fun provideWeatherRequestManager(apiInterface: ApiInterface): WeatherRequestManager = WeatherRequestManager(apiInterface)
+    fun provideWeatherRequestManager(apiInterface: ApiInterface, @ApplicationContext context: Context):
+            WeatherRequestManager = WeatherRequestManager(apiInterface, context)
 
-//    @Singleton
-//    @Provides
-//    fun provideForecastRequestManager(apiInterface: ApiInterface): ForecastRequestManager = ForecastRequestManager(apiInterface)
+    @Singleton
+    @Provides
+    fun provideForecastRequestManager(apiInterface: ApiInterface, @ApplicationContext context: Context):
+            ForecastRequestManager = ForecastRequestManager(apiInterface, context)
 
     @Singleton
     @Provides
     fun providesWeatherRepository(webRequestRequestManager: WeatherRequestManager) =
         CurrentWeatherRepository(webRequestRequestManager) as WeatherRepository
 
-//    @Singleton
-//    @Provides
-//    fun providesForecastRepository(forecastRequestManager: ForecastRequestManager) =
-//        ForecastWeatherRepository(forecastRequestManager) as ForecastRepository
+    @Singleton
+    @Provides
+    fun providesForecastRepository(forecastRequestManager: ForecastRequestManager) =
+        ForecastWeatherRepository(forecastRequestManager) as ForecastRepository
 }
