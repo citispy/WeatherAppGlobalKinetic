@@ -3,6 +3,10 @@ package com.mobile.weatherappglobalkenetic.ui.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mobile.weatherappglobalkenetic.R
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+
+    private val permissionsViewModel: PermissionsViewModel by viewModels()
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
 
@@ -11,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         initNavController()
+        observeViewModel()
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_items, menu)
         return true
@@ -41,5 +46,54 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         NavigationUI.setupWithNavController(binding.toolbar, navController, getAppBarConfiguration())
     }
+    private fun observeViewModel() {
+        observePermissions()
+    }
+    private fun observePermissions() {
+        permissionsViewModel.locationPermissionsRequested.observe(this) {
+            if (it.contentIfNotHandled == true) {
+                checkLocationPermissions()
+            }
+        }
+    }
+    private fun checkLocationPermissions() {
+        if (TrackingUtils.hasLocationPermissions(this)) {
+            permissionsViewModel.permissionsGranted(true)
+        } else {
+            requestPermissions()
+        }
+    }
+
+    private fun requestPermissions() {
+        EasyPermissions.requestPermissions(
+            this,
+            getString(R.string.location_permissions_required),
+            LOCATION_PERMISSION_REQUEST_CODE,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        permissionsViewModel.permissionsGranted(false)
+
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            AppSettingsDialog.Builder(this).build().show()
+        } else {
+            checkLocationPermissions()
+        }
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+        permissionsViewModel.permissionsGranted(true)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    private fun getAppBarConfiguration(): AppBarConfiguration {
+        return AppBarConfiguration.Builder(R.id.weatherFragment)
+            .build()
     }
 }
