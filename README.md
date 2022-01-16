@@ -1,28 +1,27 @@
 # WeatherAppGlobalKinetic
-**_Please note: This app won't compile without a PlacesAPI key. If you want to run the app you can contact me on m.yusuf.isaacs@gmail.com or create your own API key._**
 
 ## Introduction
-This is my submission for the Global Kinetic Tech Task that is part of the interview process.
+This is my submission for the Global Kinetic Tech Task that is part of their interview process.
 
 The task was to create an Android app that displays the weather for a users current location using the OpenWeatherMap Api.
 
-I should mention for transparency that this was my second consecutive tech task for creating a weather app using the OpenWeatherMap Api. I have therefore reused a lot of my old code but I believe I have made significant improvements to the code. As of writing this, I haven't received feedback for my previous task yet, so these improvements are my own.
+I should mention for transparency that this was my second consecutive tech task to create a weather app using the OpenWeatherMap Api. I have therefore reused a lot of my old code but I believe I have made significant improvements. As of writing, I haven't received feedback for my previous task, so these improvements are my own.
 
 ## Improvisations
-According to the requirements I received, one of the criteria used to assess the assignment is improvisation. I took this to mean that there is flexibility in the way I implement the app, and I'm allowed to add features that were not specifically requested. I will list the improvisations I have made but all except the last were requirements in my previous assignment. 
+According to the requirements I received, one of the criteria used to assess the assignment is improvisation. I took this to mean that there is flexibility in the way I implement the app, and I'm allowed to add features that were not specifically requested. I will list the improvisations I have made but all except the first were requirements in my previous assignment. 
 
 I have improvised in the following ways:
+- Used the city name in my API request instead of coordinates. I wasn't getting accurate information back when using coordinates
 - Added the ability to view a 5 day forecast
 - Implemented PlacesAPI so that a user can set their location manually
-- Change the background colour depending on the weather type (cloudy, sunny, or rainy) 
-- Used the city name in my API request instead of coordinates. I wasn't getting accurate information back when using coordinates
+- Change the background colour depending on the weather type (cloudy, sunny, or rainy)
 
 ## API Requests
 Request are made to the following endpoints:
 - api.openweathermap.org/data/2.5/weather
 - api.openweathermap.org/data/2.5/forecast
 
-Requests are made using Retrofit. I created a class called ApiService which contains information about each request. I also created a class called ABaseWebRequestManager which can be extended by child request manager classes. Request manager classes handle every about an API request, including loading states, error messages, and successful responses.
+Requests are made using Retrofit. I created a class called ApiInterface which contains information about each request. I also created an abstract class called ABaseWebRequestManager which is extended by child request manager classes. Request manager classes handle everything about an API request, including loading states, error messages, and successful responses.
 
 Requests require a city name as a parameter and is obtained in two ways, namely, from Geocoding using coordinates, or from the Places API, depending on whether the location was retrieved from GPS or PlacesAPI.
 
@@ -38,8 +37,46 @@ For the architechture, I used MVVM because it's the recomended approach by Googl
 
 Two Viewmodels were created for sending weather information to the required Fragments. I also created separate Repositories for pulling data from the network and bringing that data into the Viewmodels. This is all done with Livedata.
 
-I also went with the one Activity, many Fragments approach. 
+I also went with the one Activity, many Fragments approach. Displaying and navigating between Fragments is done with the NavigationComponent library. 
 
-Displaying and navigating between Fragments is done with the NavigationComponent library. 
+## Screens and Responsibilities
+Next I'll spend some time talking about the MainActivity and Fragments I created and what they are responsible for.
 
-Next I'll spend some time talking about the Main Activity and Fragments I created and what they are responsible for. 
+### MainActivity
+The MainActivity has several responsibilities which include:
+- Setup of the NavGraph and Toolbar
+- Requesting Permissions
+- Setting the background color when the weather type changes
+- Setting the title of the Toolbar to the current city name
+
+Permissions are requested by Fragments who require them through the PermissionsViewModel. The Fragment then uses a LiveData to observe whether the permissions were granted or not and responds appropriately.
+
+The background colour is set by observing the WeatherViewModel so that when a successful api call is made, the Activity has access to the colour id.
+
+The toolbar title is set by observing the LocationViewModel. The LocationViewModel checks whether a city name has been saved in SharedPreferences. If it has, the title is set. If not, the title is set when the last known location is found or the user sets their location in PlacesAPI.
+
+### WeatherFragment
+The WeatherFragment's main responsibility is displaying the CurrentWeatherFragment and the ForecastFragment. Other responsibilities of the WeatherFragment include:
+- Keeping track of the UI state
+- The UI state can either be:
+  - LOADING
+  - ERROR_MESSAGE_RECEIVED
+  - SUCCESSFULLY_RETRIEVED_DATA
+  - NO_LOCATION_FOUND
+- Requesting Permissions if the city name has not been saved to SharedPreferences
+- Getting the last known location if location permissions has been granted and then setting the location in the LocationViewModel
+- Setting the city name in the LocationViewModel if a location was set by last known location or PlacesAPI
+- Displaying error messages for API errors and no location errors
+
+The UI state of the Fragment is determined by the UiViewModel which has a MediatorLiveData. WeatherViewModel.ErrorMessage, WeatherViewModel.isLoading and ForecastViewModel.isLoading are added as sources for this MediatorLiveData. I previously had ForecastViewModel.message as a source as well but it was causing issues. I'm not sure if this is a good solution for keeping track of the UI state but I think it's working fine. It does need some work though. I also created an enum class inside the UiViewModel for the different UI states.
+
+## Bugs
+- Loading progress stops when the current weather is obtained from the API. There are times when the forecast hasn't been retrieved yet but there's no loading progress shown
+## Potential Improvements to be made
+This list is not exhaustive but I thought I would list a few improvements that I think could be made:
+- Create an ApiError object that creates error messages depending on the error type
+- City name should be set inside the LocationViewModel when the location LiveData's value is set, instead of the WeatherFragment
+- An API call is made on each device configuration change
+- When initializing the LocationViewModel and the city name is retrieved from SharedPreferences, the setCityName() method is called which re-saves the city name in SharedPreferences before setting the location LiveData value
+- Observing network connectivity issues using the ConnectivityManager
+- Scoping ViewModels to the NavGraph so that the ViewModel is not kept alive when not needed. This would be important if more fragments were added to the app
