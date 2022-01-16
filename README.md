@@ -1,5 +1,8 @@
 # WeatherAppGlobalKinetic
-This is my submission for the Global Kenetic Tech Task that is part of the interview process.
+**_Please note: This app won't compile without a PlacesAPI key. If you want to run the app you can contact me on m.yusuf.isaacs@gmail.com or create your own API key._**
+
+## Introduction
+This is my submission for the Global Kinetic Tech Task that is part of the interview process.
 
 The task was to create an Android app that displays the weather for a users current location using the OpenWeatherMap Api.
 
@@ -12,8 +15,16 @@ According to the requirements I received, one of the criteria used to assess the
 - Used the city name in my api request instead of coordinates. I wasn't getting accurate information back when using coordinates
 
 ## API Requests
+Request are made to the following endpoints:
+- api.openweathermap.org/data/2.5/weather
+- api.openweathermap.org/data/2.5/forecast
 
-api.openweathermap.org/data/2.5/weather
-api.openweathermap.org/data/2.5/forecast
-Requests are made using city name as a parameter. I decided to use the city name in the request because when sending coordinates, the values received back are not accurate. The city name is retrieved in two ways, either from Geocoding using coordinates, or from the Places API, depending on whether the location is retrieved from GPS or PlacesAPI.
+A city name is sent as a parameter in requests and is obtained in two ways, namely, from Geocoding using coordinates, or from the Places API, depending on whether the location is retrieved from GPS or PlacesAPI.
+
+Units are also sent as a parameter in each api request. A unit can either be standard, imperial, or metric. I've set the default unit value to metric.
+
+## App Flow
 ![This is an image](https://raw.githubusercontent.com/citispy/WeatherAppGlobalKenetic/master/WeatherApp-Flow-Diagram.png)
+
+## Architecture
+For the architechture of the app, I used MVVM because it's the recomended approach by Google.
