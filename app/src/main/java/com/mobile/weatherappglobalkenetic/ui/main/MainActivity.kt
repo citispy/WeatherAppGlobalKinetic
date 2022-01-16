@@ -1,13 +1,36 @@
 package com.mobile.weatherappglobalkenetic.ui.main
 
+import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import com.mobile.weatherappglobalkenetic.R
+import com.mobile.weatherappglobalkenetic.databinding.ActivityMainBinding
+import com.mobile.weatherappglobalkenetic.ui.weather.current.WeatherViewModel
+import com.mobile.weatherappglobalkenetic.util.Constants.LOCATION_PERMISSION_REQUEST_CODE
+import com.mobile.weatherappglobalkenetic.util.KEY_CITY_NAME
+import com.mobile.weatherappglobalkenetic.util.SharedPrefsUtils
+import com.mobile.weatherappglobalkenetic.util.TrackingUtils
+import dagger.hilt.android.AndroidEntryPoint
+import pub.devrel.easypermissions.AppSettingsDialog
+import pub.devrel.easypermissions.EasyPermissions
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private val permissionsViewModel: PermissionsViewModel by viewModels()
     private val weatherViewModel: WeatherViewModel by viewModels()
+    private val locationViewModel: LocationViewModel by viewModels()
+
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
 
@@ -33,6 +56,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
         return true
     }
+
     private fun initNavController() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHost)
                 as NavHostFragment
@@ -49,10 +73,13 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
         setSupportActionBar(binding.toolbar)
         NavigationUI.setupWithNavController(binding.toolbar, navController, getAppBarConfiguration())
     }
+
     private fun observeViewModel() {
         observePermissions()
+        observeCityName()
         observerBackgroundColor()
     }
+
     private fun observePermissions() {
         permissionsViewModel.locationPermissionsRequested.observe(this) {
             if (it.contentIfNotHandled == true) {
@@ -60,6 +87,15 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             }
         }
     }
+
+    private fun observeCityName() {
+        locationViewModel.cityName.observe(this) {
+            if (it != null) {
+                binding.toolbar.title = it
+            }
+        }
+    }
+
     private fun observerBackgroundColor() {
         weatherViewModel.backgroundColor.observe(this) {
             setBackgroundColor(it)
@@ -73,6 +109,7 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
             binding.parentContainer.setBackgroundColor(color)
         }
     }
+
     private fun checkLocationPermissions() {
         if (TrackingUtils.hasLocationPermissions(this)) {
             permissionsViewModel.permissionsGranted(true)
