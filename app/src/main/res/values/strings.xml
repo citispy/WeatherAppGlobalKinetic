@@ -13,4 +13,5 @@
     <string name="no_internet_message">Could not retrieve the current weather. You may have lost your internet connection</string>
     <string name="unknown_error_message">There was an error unknown. Could not retrieve the current weather.</string>
     <string name="edit">Edit</string>
+    <string name="city_not_found">City not found!</string>
 </resources>

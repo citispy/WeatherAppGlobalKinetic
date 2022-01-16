@@ -12,8 +12,8 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class ForecastRequestManager @Inject constructor(
-    private val apiInterface: ApiInterface,
-    private val context: Context
+    override val apiInterface: ApiInterface,
+    override val context: Context
 ) : ABaseRequestManager() {
 
     val fiveDayForecast = MutableLiveData<FiveDayForecast>()

@@ -12,7 +12,10 @@ import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
-class WeatherRequestManager @Inject constructor(private val apiInterface: ApiInterface, private val context: Context): ABaseRequestManager() {
+class WeatherRequestManager @Inject constructor(
+    override val apiInterface: ApiInterface,
+    override val context: Context
+) : ABaseRequestManager() {
 
     val currentWeatherInfo = MutableLiveData<CurrentWeatherInfo>()
 
@@ -21,8 +24,8 @@ class WeatherRequestManager @Inject constructor(private val apiInterface: ApiInt
 
         apiInterface.getCurrentWeatherInfo(cityName).enqueue(object : Callback<CurrentWeatherInfo> {
             override fun onResponse(call: Call<CurrentWeatherInfo>, response: Response<CurrentWeatherInfo>) {
-                if(response.code() == 404) {
-                    currentWeatherInfo.value = CurrentWeatherInfo(errorMessage = "City not found!")
+                if (response.code() == 404) {
+                    currentWeatherInfo.value = CurrentWeatherInfo(errorMessage = context.getString(R.string.city_not_found))
                 } else {
                     currentWeatherInfo.value = response.body()
                 }
@@ -30,7 +33,6 @@ class WeatherRequestManager @Inject constructor(private val apiInterface: ApiInt
             }
 
             override fun onFailure(call: Call<CurrentWeatherInfo>, t: Throwable) {
-                // TODO: Extract string resources 
                 val message: String = if (t is IOException) {
                     context.getString(R.string.no_internet_message)
                 } else {
