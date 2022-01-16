@@ -14,6 +14,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.mobile.weatherappglobalkenetic.BuildConfig
 import com.mobile.weatherappglobalkenetic.R
 import com.mobile.weatherappglobalkenetic.ui.main.LocationViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,7 +26,7 @@ class PlacePickerFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Places.initialize(requireContext().applicationContext, getString(R.string.places_api_key))
+        Places.initialize(requireContext().applicationContext, BuildConfig.MAPS_API_KEY)
     }
 
     override fun onCreateView(
