@@ -18,7 +18,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/currentWeatherFragment"
-                android:name="com.mobile.weatherappglobalkenetic.ui.weather.current.CurrentWeatherFragment"
+                android:name="com.mobile.weatherappglobalkinetic.ui.weather.current.CurrentWeatherFragment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:visibility="gone"
@@ -51,7 +51,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/forecastFragment"
-                android:name="com.mobile.weatherappglobalkenetic.ui.weather.forecast.ForecastFragment"
+                android:name="com.mobile.weatherappglobalkinetic.ui.weather.forecast.ForecastFragment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:visibility="gone"

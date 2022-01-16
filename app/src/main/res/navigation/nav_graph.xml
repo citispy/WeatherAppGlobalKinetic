@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/weatherFragment"
-        android:name="com.mobile.weatherappglobalkenetic.ui.weather.WeatherFragment">
+        android:name="com.mobile.weatherappglobalkinetic.ui.weather.WeatherFragment">
         <action
             android:id="@+id/action_weatherFragment_to_placePickerFragment"
             app:destination="@id/placePickerFragment"
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/placePickerFragment"
-        android:name="com.mobile.weatherappglobalkenetic.ui.placepicker.PlacePickerFragment"
+        android:name="com.mobile.weatherappglobalkinetic.ui.placepicker.PlacePickerFragment"
         android:label="Choose a city"
         tools:layout="@layout/fragment_place_picker" />
 </navigation>
