@@ -3,7 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout-land/fragment_weather.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2682291666666667" />
+        <entry key="app/src/main/res/layout/day_forecast_list_item.xml" value="0.1828774062816616" />
+        <entry key="app/src/main/res/layout/fragment_current_weather.xml" value="0.5614307931570762" />
+        <entry key="app/src/main/res/layout/fragment_forecast.xml" value="0.182518115942029" />
+        <entry key="app/src/main/res/layout/fragment_place_picker.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/fragment_weather.xml" value="0.5" />
+        <entry key="app/src/main/res/menu/toolbar_items.xml" value="0.21197916666666666" />
       </map>
     </option>
   </component>
