@@ -7,15 +7,18 @@ import com.mobile.weatherappglobalkenetic.R
 class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private val permissionsViewModel: PermissionsViewModel by viewModels()
+    private val weatherViewModel: WeatherViewModel by viewModels()
     private lateinit var navController: NavController
     private lateinit var binding: ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
         initNavController()
         observeViewModel()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_items, menu)
         return true
@@ -48,12 +51,26 @@ class MainActivity : AppCompatActivity() {
     }
     private fun observeViewModel() {
         observePermissions()
+        observerBackgroundColor()
     }
     private fun observePermissions() {
         permissionsViewModel.locationPermissionsRequested.observe(this) {
             if (it.contentIfNotHandled == true) {
                 checkLocationPermissions()
             }
+        }
+    }
+    private fun observerBackgroundColor() {
+        weatherViewModel.backgroundColor.observe(this) {
+            setBackgroundColor(it)
+        }
+    }
+
+    private fun setBackgroundColor(it: Int?) {
+        if (it != null) {
+            val color = resources.getColor(it, null)
+            binding.toolbar.setBackgroundColor(color)
+            binding.parentContainer.setBackgroundColor(color)
         }
     }
     private fun checkLocationPermissions() {
