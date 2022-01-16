@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">WeatherAppGlobalKenetic</string>
+    <string name="places_api_key">AIzaSyCYU1Vcxv_GEgscA3WfXSH93VfTX1vz1Cs</string>
+    <string name="temp"> %1$s\u00B0</string>
+    <string name="location_permissions_required">You need to grant location permissions to use this app.</string>
+    <string name="retry">retry</string>
+    <string name="current">Current</string>
+    <string name="max">max</string>
+    <string name="min">min</string>
+    <string name="location_not_found_select_location_manually">Location not found. Select location manually?</string>
+    <string name="set">set</string>
+    <string name="you_don_t_have_the_required_permissions">You don\'t have the required permissions</string>
+    <string name="enable">enable</string>
+    <string name="no_internet_message">Could not retrieve the current weather. You may have lost your internet connection</string>
+    <string name="unknown_error_message">There was an error unknown. Could not retrieve the current weather.</string>
+    <string name="edit">Edit</string>
 </resources>
