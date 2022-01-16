@@ -68,10 +68,23 @@ The WeatherFragment's main responsibility is displaying the CurrentWeatherFragme
 - Setting the city name in the LocationViewModel if a location was set by last known location or PlacesAPI
 - Displaying error messages for API errors and no location errors
 
-The UI state of the Fragment is determined by the UiViewModel which has a MediatorLiveData. WeatherViewModel.ErrorMessage, WeatherViewModel.isLoading and ForecastViewModel.isLoading are added as sources for this MediatorLiveData. I previously had ForecastViewModel.message as a source as well but it was causing issues. I'm not sure if this is a good solution for keeping track of the UI state but I think it's working fine. It does need some work though. I also created an enum class inside the UiViewModel for the different UI states.
+The UI state of the Fragment is determined by the UiViewModel which has a MediatorLiveData. WeatherViewModel.ErrorMessage, WeatherViewModel.isLoading and ForecastViewModel.isLoading are added as sources for this MediatorLiveData. I previously had ForecastViewModel.message as a source as well but it was causing issues. I'm not sure if this is a good solution for keeping track of the UI state but I think it's working fine. It does need some work though. I also created an enum class inside the UiViewModel for the different UI states. The observer inside the WeatherFragment then updates the UI by hiding views that are not required for that state or setting the error TextView text.
+
+### CurrentWeatherFragment
+The CurrentWeatherFragment has a single responsibility, displaying the current weather for the city that was set. An API call is made by observing the city name in the LocationViewModel. If the city name is not null, an API call is made.
+
+The WeatherViewModel is used in this Fragment and before displaying the results, Transformation.map() is used several times to convert the data is to the correct format.
+
+### ForecastFragment
+The ForecastFragment also has a single responsibility, displaying a 5 day forecast inside a RecyclerView. Just as with the WeatherFragment, An API call is made by observing the city name in the LocationViewModel. If the city name is not null, an API call is made.
+
+The response received in the API response gives several forecast for each day. I didn't want to display all forecasts so I decided to only include the maximum temperature for each day. This is done by the addHighestTempPerDay() method. The forecast is also not added if the forecast is for the current day. These are all done inside a Transformation.map(). The Transformation.map() is used several times in this ViewModel to format data correctly to be used inside the ForecastFragment.
 
 ## Bugs
 - Loading progress stops when the current weather is obtained from the API. There are times when the forecast hasn't been retrieved yet but there's no loading progress shown
+- Clicking the edit icon in the Toolbar at the start destination and then again in the next destination crashes the app
+- When setting a location using PlacesAPI and then being navigated back to the start destination you click the refresh icon, no loading progress is shown and the no location error displays before showing the weather for the current location
+
 ## Potential Improvements to be made
 This list is not exhaustive but I thought I would list a few improvements that I think could be made:
 - Create an ApiError object that creates error messages depending on the error type
@@ -80,3 +93,15 @@ This list is not exhaustive but I thought I would list a few improvements that I
 - When initializing the LocationViewModel and the city name is retrieved from SharedPreferences, the setCityName() method is called which re-saves the city name in SharedPreferences before setting the location LiveData value
 - Observing network connectivity issues using the ConnectivityManager
 - Scoping ViewModels to the NavGraph so that the ViewModel is not kept alive when not needed. This would be important if more fragments were added to the app
+- My ForecastAdapter uses notifyDataSetChanged() to update the adapter. This is not ideal
+- I don't have much experience with Unit testing and do think they can be improved. I especially think I could make use of mock objects to test my DateUtils class. At the moments I'm not testing whether a specific date equals todays date
+
+## Libaries Used
+- Retrofit
+- Gson
+- OkHttp
+- Hilt
+- NavComponent
+- JUnit4, Android Test Library, Android Architecture Components Core Test Library, and Robolectric
+- EasyPermissions
+- PlacesAPI
