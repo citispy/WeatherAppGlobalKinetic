@@ -43,9 +43,11 @@ class WeatherFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        uiViewModel.addErrorSource(weatherViewModel.errorMessage)
-        uiViewModel.addLoadingSource(weatherViewModel.isLoading)
-        uiViewModel.addLoadingSource(forecastViewModel.isLoading)
+        uiViewModel.apply {
+            addErrorSource(weatherViewModel.errorMessage)
+            addLoadingSource(weatherViewModel.isLoading)
+            addLoadingSource(forecastViewModel.isLoading)
+        }
     }
 
     override fun onCreateView(
@@ -66,9 +68,11 @@ class WeatherFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        uiViewModel.removeErrorSource(weatherViewModel.errorMessage)
-        uiViewModel.removeLoadingSource(weatherViewModel.isLoading)
-        uiViewModel.removeLoadingSource(forecastViewModel.isLoading)
+        uiViewModel.apply {
+            removeErrorSource(weatherViewModel.errorMessage)
+            removeLoadingSource(weatherViewModel.isLoading)
+            removeLoadingSource(forecastViewModel.isLoading)
+        }
     }
 
     private fun initClickListeners() {
