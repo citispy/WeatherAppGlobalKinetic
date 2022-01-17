@@ -95,6 +95,7 @@ This list is not exhaustive but I thought I would list a few improvements that I
 - Scoping ViewModels to the NavGraph so that the ViewModel is not kept alive when not needed. This would be important if more fragments were added to the app
 - My ForecastAdapter uses notifyDataSetChanged() to update the adapter. This is not ideal
 - I don't have much experience with Unit testing and do think my unit tests can be improved. I especially think I could make use of mock objects to test my DateUtils class. At the moment I'm not testing whether a specific date equals today's date
+- Making use of Coroutines
 
 ## Libraries Used
 - Retrofit
