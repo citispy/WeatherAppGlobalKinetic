@@ -11,7 +11,7 @@ I should mention for transparency that this was my second consecutive tech task 
 According to the requirements I received, one of the criteria used to assess the assignment is improvisation. I took this to mean that there is flexibility in the way I implement the app, and I'm allowed to add features that were not specifically requested. I will list the improvisations I have made but all except the first were requirements in my previous assignment. 
 
 I have improvised in the following ways:
-- Used the city name in my API request instead of coordinates. I wasn't getting accurate information back when using coordinates
+- Used the city name in my API request instead of coordinates. I wasn't getting accurate information back when using coordinates.
 - Added the ability to view a 5-day forecast
 - Implemented PlacesAPI so that a user can set their location manually
 - Change the background colour depending on the weather type (cloudy, sunny, or rainy)
